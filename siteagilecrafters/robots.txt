@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://agilecrafters.net/sitemap.xml
