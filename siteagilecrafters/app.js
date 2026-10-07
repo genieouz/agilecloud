@@ -14,7 +14,7 @@ function mountChrome() {
     header.innerHTML = `<a class="skip-link" href="#main">Skip to content</a>
       <nav class="site-nav" aria-label="Primary"><div class="nav-inner">
         <a class="brand" href="index.html" aria-label="AgileCrafters home"><span class="brand-mark" aria-hidden="true"></span><span>AgileCrafters</span></a>
-        <div class="nav-links" id="nav-links">${navItems.map(([href, label]) => `<a href="${href}" ${page === href ? 'aria-current="page"' : ""}>${label}</a>`).join("")}<a class="nav-cta" href="contact.html" ${page === "contact.html" ? 'aria-current="page"' : ""}>Start a project</a></div>
+        <div class="nav-links" id="nav-links">${navItems.map(([href, label]) => `<a href="${href}" ${page === href ? 'aria-current="page"' : ""}>${label}</a>`).join("")}<div class="locale-switch" role="group" aria-label="Language"><button type="button" data-locale="en" aria-label="English">EN</button><span aria-hidden="true">/</span><button type="button" data-locale="fr" aria-label="Français">FR</button></div><a class="nav-cta" href="contact.html" ${page === "contact.html" ? 'aria-current="page"' : ""}>Start a project</a></div>
         <button class="menu-btn" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
       </div></nav>`;
     const nav = header.querySelector(".site-nav");
@@ -29,7 +29,7 @@ function mountChrome() {
     <div class="footer-col"><h4>Explore</h4><a href="expertise.html">Expertise</a><a href="products.html">Products</a><a href="industries.html">Industries</a><a href="work.html">Work</a></div>
     <div class="footer-col"><h4>Company</h4><a href="labs.html">Labs</a><a href="culture.html">Culture</a><a href="contact.html">Contact</a></div>
     <div class="footer-col"><h4>Products</h4><a href="products.html#agilecloud">AgileCloud</a><a href="products.html#processable">Processable</a><a href="products.html#agileai">AgileAI</a><a href="products.html#agilex">AgileX</a><a href="products.html#agileagro">AgileAgro</a></div>
-  </div><div class="footer-bottom"><span>© ${new Date().getFullYear()} AgileCrafters. All rights reserved.</span><span>Technology, crafted with intent.</span></div></div></footer>`;
+  </div><div class="footer-bottom"><span>© ${new Date().getFullYear()} AgileCrafters. <span>All rights reserved.</span></span><span>Technology, crafted with intent.</span></div></div></footer>`;
 }
 
 function setupReveal() {
@@ -125,7 +125,7 @@ function setupBuilder() {
   let count = 0;
   function addNode(name, x, y) {
     if ([...stage.querySelectorAll(".builder-node")].some(n => n.dataset.name === name)) return;
-    const node = document.createElement("div"); node.className="builder-node"; node.dataset.name=name; node.textContent=name;
+    const node = document.createElement("div"); node.className="builder-node"; node.dataset.name=name; node.textContent=window.AgileI18n?.t(name) || name;
     node.style.left=`${Math.max(10,Math.min(x,stage.clientWidth-160))}px`; node.style.top=`${Math.max(10,Math.min(y,stage.clientHeight-60))}px`; stage.append(node); count++;
     let drag=null; node.addEventListener("pointerdown",e=>{drag={x:e.clientX-parseFloat(node.style.left),y:e.clientY-parseFloat(node.style.top)};node.setPointerCapture(e.pointerId)});
     node.addEventListener("pointermove",e=>{if(!drag)return;node.style.left=`${Math.max(5,Math.min(e.clientX-drag.x,stage.clientWidth-150))}px`;node.style.top=`${Math.max(5,Math.min(e.clientY-drag.y,stage.clientHeight-50))}px`});
@@ -134,11 +134,12 @@ function setupBuilder() {
   palette.forEach((el,i)=>{ el.draggable=true; el.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",el.dataset.component)); el.addEventListener("click",()=>addNode(el.dataset.component,50+(count%3)*160,60+Math.floor(count/3)*90)); });
   stage.addEventListener("dragover",e=>e.preventDefault());
   stage.addEventListener("drop",e=>{e.preventDefault();const r=stage.getBoundingClientRect();addNode(e.dataTransfer.getData("text/plain"),e.clientX-r.left-65,e.clientY-r.top-20)});
+  document.addEventListener("localechange",()=>stage.querySelectorAll(".builder-node").forEach(node=>node.textContent=window.AgileI18n?.t(node.dataset.name)||node.dataset.name));
 }
 
 function setupContact() {
   const form = document.querySelector("#contact-form"); if (!form) return;
-  form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const subject=encodeURIComponent(`Project enquiry — ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`Name: ${fd.get("name")}\nOrganization: ${fd.get("organization")}\nEmail: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
+  form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const french=window.AgileI18n?.locale==="fr"; const subject=encodeURIComponent(`${french?"Demande de projet":"Project enquiry"} — ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`${french?"Nom":"Name"}: ${fd.get("name")}\n${french?"Organisation":"Organization"}: ${fd.get("organization")}\n${french?"E-mail":"Email"}: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
 }
 
-mountChrome(); setupExperience(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
+mountChrome(); window.AgileI18n?.init(); setupExperience(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
