@@ -35,6 +35,7 @@ function mountChrome() {
 function setupReveal() {
   const els = document.querySelectorAll(".reveal, .process-step");
   if (!els.length) return;
+  els.forEach((el, index) => el.style.setProperty("--delay", `${(index % 5) * 55}ms`));
   const io = new IntersectionObserver(entries => entries.forEach(entry => {
     if (entry.isIntersecting) { entry.target.classList.add("visible"); io.unobserve(entry.target); }
   }), { threshold: .16 });
@@ -45,22 +46,75 @@ function setupNetwork() {
   const canvas = document.querySelector("#network-canvas");
   if (!canvas || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const ctx = canvas.getContext("2d");
-  let points = [], pointer = { x: .5, y: .5 }, raf;
+  const network = canvas.closest(".network");
+  const core = network.querySelector(".network-core");
+  const nodes = [...network.querySelectorAll(".network-node")];
+  let points = [], pointer = { x: .5, y: .5 }, raf, time = 0;
   const resize = () => {
     const dpr = Math.min(devicePixelRatio, 2), rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr; canvas.height = rect.height * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    points = Array.from({length: 38}, () => ({ x: Math.random()*rect.width, y: Math.random()*rect.height, vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.18, r:Math.random()*1.3+.4 }));
+    points = Array.from({length: 28}, () => ({ x: Math.random()*rect.width, y: Math.random()*rect.height, vx:(Math.random()-.5)*.14, vy:(Math.random()-.5)*.14, r:Math.random()*1.5+.4 }));
   };
   const draw = () => {
-    const w = canvas.clientWidth, h = canvas.clientHeight; ctx.clearRect(0,0,w,h);
+    const w = canvas.clientWidth, h = canvas.clientHeight, root = network.getBoundingClientRect();
+    time += .012; ctx.clearRect(0,0,w,h);
+    const center = { x: w / 2, y: h / 2 };
+    nodes.forEach((node, index) => {
+      const rect = node.getBoundingClientRect();
+      const end = { x: rect.left - root.left + rect.width / 2, y: rect.top - root.top + rect.height / 2 };
+      const dx = end.x - center.x, dy = end.y - center.y;
+      const control = { x: center.x + dx * .48 - dy * .08, y: center.y + dy * .48 + dx * .08 };
+      const gradient = ctx.createLinearGradient(center.x, center.y, end.x, end.y);
+      gradient.addColorStop(0, "rgba(52,120,246,.55)"); gradient.addColorStop(1, "rgba(81,217,239,.16)");
+      ctx.strokeStyle = gradient; ctx.lineWidth = 1.15; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
+      const t = (time + index / nodes.length) % 1;
+      const mt = 1 - t, x = mt*mt*center.x + 2*mt*t*control.x + t*t*end.x, y = mt*mt*center.y + 2*mt*t*control.y + t*t*end.y;
+      ctx.fillStyle = "rgba(81,217,239,.92)"; ctx.shadowColor = "rgba(52,120,246,.75)"; ctx.shadowBlur = 12; ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+    });
     for (const p of points) { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1; }
-    for(let i=0;i<points.length;i++) for(let j=i+1;j<points.length;j++) { const a=points[i],b=points[j], d=Math.hypot(a.x-b.x,a.y-b.y); if(d<115){ ctx.strokeStyle=`rgba(90,164,235,${(1-d/115)*.13})`; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
-    for(const p of points){ ctx.fillStyle="rgba(106,213,255,.42)"; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
+    for(const p of points){ ctx.fillStyle="rgba(52,120,246,.22)"; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
     raf=requestAnimationFrame(draw);
   };
   resize(); draw(); addEventListener("resize", resize);
-  canvas.closest(".network")?.addEventListener("pointermove", e => { const r=canvas.getBoundingClientRect(); pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}; canvas.closest(".network").querySelector(".network-core").style.transform=`translate(calc(-50% + ${(pointer.x-.5)*12}px),calc(-50% + ${(pointer.y-.5)*12}px))`; });
+  network.addEventListener("pointermove", e => { const r=canvas.getBoundingClientRect(); pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}; core.style.setProperty("--core-x",`${(pointer.x-.5)*16}px`); core.style.setProperty("--core-y",`${(pointer.y-.5)*16}px`); network.style.transform=`rotateX(${(.5-pointer.y)*3}deg) rotateY(${(pointer.x-.5)*4}deg)`; });
+  network.addEventListener("pointerleave",()=>{ core.style.setProperty("--core-x","0px"); core.style.setProperty("--core-y","0px"); network.style.transform=""; });
   document.addEventListener("visibilitychange",()=>{ if(document.hidden)cancelAnimationFrame(raf); else draw(); });
+}
+
+function setupExperience() {
+  requestAnimationFrame(() => document.body.classList.add("is-ready"));
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const tiltCards = document.querySelectorAll(".engine, .product-card");
+  tiltCards.forEach(card => {
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--rx", `${((e.clientY-r.top)/r.height-.5)*-3}deg`);
+      card.style.setProperty("--ry", `${((e.clientX-r.left)/r.width-.5)*4}deg`);
+    });
+    card.addEventListener("pointerleave", () => { card.style.setProperty("--rx", "0deg"); card.style.setProperty("--ry", "0deg"); });
+  });
+
+  let scheduled = false;
+  const parallax = () => {
+    const y = scrollY;
+    document.querySelector(".hero")?.style.setProperty("--parallax-y", `${Math.min(y * .12, 70)}px`);
+    document.querySelectorAll(".product-visual").forEach(visual => {
+      const r = visual.getBoundingClientRect();
+      visual.style.setProperty("--visual-y", `${Math.max(-18, Math.min(18, (innerHeight/2-r.top-r.height/2)*.035))}px`);
+    });
+    scheduled = false;
+  };
+  addEventListener("scroll", () => { if (!scheduled) { scheduled = true; requestAnimationFrame(parallax); } }, { passive: true });
+  parallax();
+
+  document.addEventListener("click", e => {
+    const link = e.target.closest("a[href]");
+    if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || url.hash || link.target || url.protocol !== "http:" && url.protocol !== "https:") return;
+    e.preventDefault(); document.body.classList.add("is-leaving"); setTimeout(() => location.href = url.href, 260);
+  });
 }
 
 function setupBuilder() {
@@ -87,4 +141,4 @@ function setupContact() {
   form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const subject=encodeURIComponent(`Project enquiry — ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`Name: ${fd.get("name")}\nOrganization: ${fd.get("organization")}\nEmail: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
 }
 
-mountChrome(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
+mountChrome(); setupExperience(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
