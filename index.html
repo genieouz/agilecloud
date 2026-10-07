@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05070c">
+  <meta name="description" content="AgileCloud is the intelligent control plane for deploying, managing, monitoring and securing infrastructure you already own.">
+  <title>AgileCloud — Your infrastructure. Simply under control.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="nav shell">
+    <a class="brand" href="/" aria-label="AgileCloud home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Agile<span>Cloud</span></span></a>
+    <nav aria-label="Main navigation">
+      <a href="#platform">Platform</a><a href="/platform.html">Solutions</a><a href="/security.html">Security</a><a href="/company.html">Company</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Request access <span>↗</span></a>
+    <button class="menu" aria-label="Open menu"><span></span><span></span></button>
+  </header>
+
+  <main>
+    <section class="hero shell" id="top">
+      <div class="hero-glow"></div>
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="live-dot"></span> Infrastructure, on your terms</div>
+        <h1>Your infrastructure.<br><em>Simply under control.</em></h1>
+        <p class="lead">Deploy, manage, monitor and secure your infrastructure — from one intelligent control plane.</p>
+        <p class="support">Your infrastructure stays yours. AgileCloud works across your servers, Kubernetes clusters, private clouds and cloud providers.</p>
+        <div class="hero-actions"><a class="button primary" href="#deploy-demo">Start with AgileCloud <span>→</span></a><a class="button ghost" href="#platform">Explore the platform</a></div>
+        <div class="trust-line"><span>✓ No infrastructure migration</span><span>✓ No lock-in</span><span>✓ One control plane</span></div>
+      </div>
+
+      <div class="control-plane reveal" data-tilt aria-label="Animated infrastructure topology">
+        <div class="panel-top"><span><b></b> GLOBAL CONTROL PLANE</span><span>LIVE · 12:48:09 UTC</span></div>
+        <div class="topology">
+          <svg class="connectors" viewBox="0 0 620 500" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M310 248 C250 225 165 205 105 135"/><path d="M310 248 C375 220 470 195 515 125"/><path d="M310 248 C230 290 160 325 105 390"/><path d="M310 248 C390 290 460 335 520 395"/>
+            <path class="flow" d="M310 248 C250 225 165 205 105 135"/><path class="flow delay" d="M310 248 C375 220 470 195 515 125"/><path class="flow delay2" d="M310 248 C230 290 160 325 105 390"/><path class="flow delay3" d="M310 248 C390 290 460 335 520 395"/>
+          </svg>
+          <div class="core-node"><div class="core-rings"><i></i><i></i><i></i></div><span class="core-icon">A</span><strong>AgileCloud</strong><small>12 systems connected</small></div>
+          <div class="infra-node n1"><span class="node-icon">◈</span><div><strong>AWS</strong><small><i></i> Healthy · 24 services</small></div><b>42%</b></div>
+          <div class="infra-node n2"><span class="node-icon">K8</span><div><strong>Kubernetes</strong><small><i></i> 18 workloads</small></div><b>98%</b></div>
+          <div class="infra-node n3"><span class="node-icon">DC</span><div><strong>Datacenter</strong><small><i></i> 08 servers</small></div><b>12ms</b></div>
+          <div class="infra-node n4"><span class="node-icon">DB</span><div><strong>Databases</strong><small><i></i> 06 instances</small></div><b>99.9</b></div>
+          <div class="metric-card"><span>Infrastructure health</span><strong>96.4%</strong><svg viewBox="0 0 160 38"><path d="M0 31 C18 32 18 24 35 25 S55 10 70 17 S92 28 108 13 S138 10 160 3"/></svg></div>
+        </div>
+        <div class="panel-bottom"><span><i></i> All systems operational</span><span>ENCRYPTED · TLS 1.3</span></div>
+      </div>
+      <div class="scroll-cue"><span></span> Scroll to explore</div>
+    </section>
+
+    <section class="logo-ribbon" aria-label="Supported environments"><div><span>LINUX</span><span>DOCKER</span><span>KUBERNETES</span><span>AWS</span><span>AZURE</span><span>BARE METAL</span><span>PRIVATE CLOUD</span></div></section>
+
+    <section class="section shell clarity" id="platform">
+      <div class="section-heading reveal"><span class="kicker">01 · UNIFIED OPERATIONS</span><h2>From complexity<br>to <em>clarity.</em></h2><p>All the power of modern infrastructure, without making your team carry its cognitive load.</p></div>
+      <div class="clarity-stage reveal">
+        <div class="complex-map" aria-hidden="true"><span class="chaos c1">K8s</span><span class="chaos c2">TLS</span><span class="chaos c3">VM</span><span class="chaos c4">DB</span><span class="chaos c5">LOG</span><span class="chaos c6">DNS</span><svg viewBox="0 0 430 320"><path d="M55 50L340 270M350 50L75 260M200 25L215 292M35 160L390 150M60 60L360 60L360 250L60 250Z"/></svg><small>FRAGMENTED TOOLS</small></div>
+        <div class="clarity-arrow"><span>→</span><small>ABSTRACT</small></div>
+        <div class="app-card">
+          <div class="app-card-head"><span>APPLICATION</span><button>•••</button></div>
+          <div class="app-name"><span>pa</span><div><strong>payment-api</strong><small>Production</small></div><i>Healthy</i></div>
+          <div class="stat-grid"><div><small>Instances</small><strong>3</strong></div><div><small>CPU</small><strong>42%</strong></div><div><small>Memory</small><strong>58%</strong></div><div><small>Deployment</small><strong>K8s</strong></div></div>
+          <div class="spark"><span>LIVE TRAFFIC</span><svg viewBox="0 0 380 70"><path d="M0 60 C30 55 35 62 60 50 S92 25 120 42 S150 55 178 28 S215 12 248 35 S290 60 315 25 S350 28 380 8"/></svg></div>
+        </div>
+      </div>
+      <div class="manifesto reveal"><span>AgileCloud abstracts complexity</span><strong>without removing control.</strong></div>
+    </section>
+
+    <section class="section demo-section" id="deploy-demo">
+      <div class="shell demo-grid">
+        <div class="section-heading reveal"><span class="kicker">02 · INTERACTIVE DEPLOYMENT</span><h2>Deploy anything.<br><em>Anywhere.</em></h2><p>Choose what you need. AgileCloud configures the infrastructure, network, security and observability for you.</p><div class="terminal-note"><span>$</span> From zero to production in minutes.</div></div>
+        <div class="deploy-console reveal" id="deployConsole">
+          <div class="window-bar"><span><i></i><i></i><i></i></span><b>NEW DEPLOYMENT</b><small>agilecloud.console</small></div>
+          <div class="deploy-body">
+            <div class="demo-step active" data-step="1"><div class="step-label"><span>01</span><div><small>WORKLOAD</small><strong>What do you want to deploy?</strong></div></div><div class="choice-grid" data-group="workload"><button class="selected" data-value="Application">◫ Application</button><button data-value="PostgreSQL">◉ PostgreSQL</button><button data-value="MongoDB">⬡ MongoDB</button><button data-value="Redis">◇ Redis</button><button data-value="Kafka">≋ Kafka</button><button data-value="Kubernetes">K8 Kubernetes</button></div></div>
+            <div class="demo-step" data-step="2"><div class="step-label"><span>02</span><div><small>TARGET</small><strong>Where?</strong></div></div><div class="choice-grid compact" data-group="target"><button class="selected" data-value="My servers">My servers</button><button data-value="Kubernetes">Kubernetes</button><button data-value="AWS">AWS</button><button data-value="Azure">Azure</button><button data-value="Private Cloud">Private cloud</button></div></div>
+            <div class="demo-step" data-step="3"><div class="step-label"><span>03</span><div><small>ENVIRONMENT</small><strong>Choose a stage</strong></div></div><div class="choice-grid thirds" data-group="environment"><button data-value="Development">Development</button><button data-value="Staging">Staging</button><button class="selected" data-value="Production">Production</button></div></div>
+            <button class="deploy-button" id="deployButton"><span>Deploy application</span><b>→</b></button>
+            <div class="deployment-progress" id="deploymentProgress" aria-live="polite"><div class="progress-head"><span>DEPLOYING</span><b id="progressPercent">0%</b></div><div class="progress-track"><i></i></div><ul></ul></div>
+            <div class="deployment-success" id="deploymentSuccess"><span>✓</span><h3>Deployment successful</h3><p><b>payment-api</b> is healthy and available.</p><button id="deployAgain">Deploy another</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell kube-section">
+      <div class="section-heading centered reveal"><span class="kicker">03 · KUBERNETES</span><h2>Kubernetes power.<br><em>Without Kubernetes complexity.</em></h2><p>Simple when you want it. Powerful when you need it.</p></div>
+      <div class="kube-ui reveal" id="kubeUi">
+        <div class="kube-sidebar"><div class="mini-brand">A</div><button class="active">⌁</button><button>⬡</button><button>◫</button><button>⌁</button><button>⚙</button><span></span><button>?</button></div>
+        <div class="kube-main"><div class="ui-breadcrumb"><span>Applications</span> / payment-api <div><i></i> Live</div></div><div class="kube-title"><div><span class="app-avatar">pa</span><div><h3>payment-api</h3><p>Production · eu-west-1</p></div></div><button class="advanced-toggle" id="advancedToggle"><span>Advanced Kubernetes</span><i></i></button></div><div class="kube-stats"><div><small>REPLICAS</small><strong>3 <i>/ 3</i></strong><span>Ready</span></div><div><small>AUTOSCALING</small><strong>ON</strong><span>Min 3 · Max 10</span></div><div><small>AVAILABILITY</small><strong>99.99%</strong><span>High</span></div><div><small>STATUS</small><strong class="healthy">Healthy</strong><span>Last checked now</span></div></div><div class="resource-panel"><div class="resource-head"><div><strong>Resources</strong><span>7 components</span></div><span>STATUS</span></div><div class="resources"><div><span>DEP</span><b>payment-api</b><small>Deployment</small><i>Healthy</i></div><div><span>SVC</span><b>payment-api</b><small>Service</small><i>Active</i></div><div><span>ING</span><b>api.agile.app</b><small>Ingress</small><i>Secure</i></div><div><span>HPA</span><b>payment-api</b><small>Autoscaler</small><i>3 / 10</i></div><div><span>SEC</span><b>api-secrets</b><small>Secrets</small><i>Encrypted</i></div><div><span>NET</span><b>default-deny</b><small>NetworkPolicy</small><i>Active</i></div></div><div class="pods"><div class="pods-head"><strong>Live pods</strong><span>CPU</span><span>MEMORY</span><span>REQUESTS</span></div><div><b>payment-api-7f9d-2k8ax</b><span>38%</span><span>52%</span><span>142 /s</span></div><div><b>payment-api-7f9d-6p1st</b><span>44%</span><span>61%</span><span>157 /s</span></div><div><b>payment-api-7f9d-9z3wd</b><span>41%</span><span>56%</span><span>149 /s</span></div></div></div></div>
+      </div>
+    </section>
+
+    <section class="section ownership">
+      <div class="shell ownership-grid"><div class="section-heading reveal"><span class="kicker">04 · BRING YOUR OWN INFRASTRUCTURE</span><h2>Your infrastructure<br><em>stays yours.</em></h2><p>No forced migration. No infrastructure lock-in. Connect what you already run and gain a unified operating layer.</p><a class="text-link" href="/platform.html">How connections work <span>↗</span></a></div><div class="orbit reveal"><div class="orbit-ring r1"></div><div class="orbit-ring r2"></div><div class="orbit-core"><span>A</span><b>AgileCloud</b><small>CONTROL PLANE</small></div><div class="satellite s1"><i>◈</i>AWS</div><div class="satellite s2"><i>▦</i>Azure</div><div class="satellite s3"><i>K8</i>Kubernetes</div><div class="satellite s4"><i>BM</i>Bare metal</div><div class="satellite s5"><i>DC</i>Datacenter</div><div class="satellite s6"><i>VP</i>VPS</div></div></div>
+    </section>
+
+    <section class="section shell modules-section">
+      <div class="section-heading split reveal"><div><span class="kicker">05 · MODULAR BY DESIGN</span><h2>One platform.<br><em>Every layer.</em></h2></div><p>Start with the capability you need today. Add more as your infrastructure and team grow.</p></div>
+      <div class="module-grid reveal">
+        <article><span>01</span><i>↗</i><div class="module-icon deploy-icon">△</div><h3>Deploy</h3><p>Applications, containers and services.</p></article><article><span>02</span><i>↗</i><div class="module-icon">K8</div><h3>Kubernetes</h3><p>Create, connect and manage clusters.</p></article><article><span>03</span><i>↗</i><div class="module-icon">◉</div><h3>Databases</h3><p>PostgreSQL, MongoDB, Redis and more.</p></article><article><span>04</span><i>↗</i><div class="module-icon">⌁</div><h3>Observe</h3><p>Metrics, logs, traces and health.</p></article><article><span>05</span><i>↗</i><div class="module-icon">◇</div><h3>Secure</h3><p>Policies, vulnerabilities and secrets.</p></article><article><span>06</span><i>↗</i><div class="module-icon">↻</div><h3>Backup</h3><p>Backup and disaster recovery.</p></article><article><span>07</span><i>↗</i><div class="module-icon">⌘</div><h3>Network</h3><p>Domains, SSL, routing and connectivity.</p></article><article><span>08</span><i>↗</i><div class="module-icon">$</div><h3>FinOps</h3><p>Understand and optimize your costs.</p></article><article><span>09</span><i>↗</i><div class="module-icon">✦</div><h3>AI Ops</h3><p>Diagnose, explain and optimize.</p></article>
+      </div>
+    </section>
+
+    <section class="section ai-section">
+      <div class="shell ai-grid"><div class="section-heading reveal"><span class="kicker">06 · AGILECLOUD INTELLIGENCE</span><h2>Ask your<br><em>infrastructure.</em></h2><p>Move from alerts to answers. AgileCloud connects signals across your stack to explain what happened and what to do next.</p><ul class="ai-benefits"><li><span>01</span>Correlate metrics, logs and deployments</li><li><span>02</span>Understand root causes in seconds</li><li><span>03</span>Act with safe, explainable recommendations</li></ul></div><div class="ai-console reveal"><div class="ai-top"><div><span>✦</span><b>AgileCloud AI</b></div><span><i></i> Connected to production</span></div><div class="message user-message"><span>YOU</span><p>Why is <b>payment-api</b> slow?</p></div><div class="message ai-message"><span>AGILECLOUD AI</span><p>Latency increased from <b>120ms</b> to <b>1.8s</b> at 14:32.</p><p>The primary cause appears to be <b>MongoDB connection pool saturation.</b></p><div class="ai-metrics"><div><small>CPU</small><strong>48%</strong><i style="--w:48%"></i></div><div><small>MONGO CONNECTIONS</small><strong class="danger">96%</strong><i class="danger" style="--w:96%"></i></div><div><small>API LATENCY</small><strong class="danger">1.8s ↑</strong><i class="danger" style="--w:88%"></i></div></div><small class="recommend-label">RECOMMENDED ACTIONS</small><div class="recommendations"><button>Increase connection pool <span>→</span></button><button>Inspect slow queries <span>→</span></button><button>Compare last deployment <span>→</span></button><button class="warning">Rollback <span>→</span></button></div></div><div class="ai-input"><span>Ask about your infrastructure…</span><button>↑</button></div></div></div>
+    </section>
+
+    <section class="section shell health-section">
+      <div class="section-heading split reveal"><div><span class="kicker">07 · INFRASTRUCTURE HEALTH</span><h2>Know the health of<br><em>everything.</em></h2></div><p>A single, explainable score across availability, performance, security, backups and cost.</p></div>
+      <div class="health-dashboard reveal"><div class="health-score"><div class="score-ring"><svg viewBox="0 0 180 180"><circle cx="90" cy="90" r="76"/><circle class="score-value" cx="90" cy="90" r="76"/></svg><div><strong>92</strong><span>/ 100</span></div></div><h3>Infrastructure health</h3><p>Excellent · <span>+3 this week</span></p></div><div class="health-bars"><div><span>Availability <small>All services operational</small></span><b>98</b><i><em style="--w:98%"></em></i></div><div><span>Performance <small>2 improvements available</small></span><b>91</b><i><em style="--w:91%"></em></i></div><div><span>Security <small>3 recommendations</small></span><b>83</b><i><em style="--w:83%"></em></i></div><div><span>Backup <small>All backups verified</small></span><b>100</b><i><em style="--w:100%"></em></i></div><div><span>Cost efficiency <small>Potential saving: 12%</small></span><b>76</b><i><em style="--w:76%"></em></i></div></div><div class="health-events"><span>RECENT SIGNALS</span><div><i class="ok">✓</i><p><b>Backup verified</b><small>payment-db · 2m ago</small></p></div><div><i>↗</i><p><b>Traffic anomaly resolved</b><small>api-gateway · 18m ago</small></p></div><div><i class="warn">!</i><p><b>Security update available</b><small>worker-node-03 · 1h ago</small></p></div><div><i class="ok">✓</i><p><b>Certificate renewed</b><small>api.agile.app · 3h ago</small></p></div></div></div>
+    </section>
+
+    <section class="section game-section" id="game">
+      <div class="shell game-grid"><div class="section-heading reveal"><span class="kicker">08 · OPERATIONS LAB</span><h2>Save the<br><em>Cluster.</em></h2><p>Incidents happen. Make the right call before your infrastructure health reaches zero.</p><div class="game-rules"><span>01</span><p>Identify the active incident</p><span>02</span><p>Choose the correct response</p><span>03</span><p>Keep the platform healthy</p></div></div><div class="game-console reveal" id="gameConsole"><div class="game-head"><div><span><i></i> PRODUCTION CLUSTER</span><b id="gameStatus">STANDBY</b></div><div class="game-stats"><div><small>HEALTH</small><strong id="healthValue">92%</strong><i><em id="healthBar"></em></i></div><div><small>SCORE</small><strong id="scoreValue">0</strong></div><div><small>UPTIME</small><strong id="uptimeValue">99.98%</strong></div></div></div><div class="cluster-map"><svg viewBox="0 0 540 250"><path d="M270 40L145 105M270 40L270 105M270 40L395 105M145 105L205 190M270 105L270 190M395 105L335 190"/></svg><div class="game-node lb">LB<small>Load balancer</small></div><div class="game-node node1">K8<small>Node 01</small></div><div class="game-node node2">K8<small>Node 02</small></div><div class="game-node node3">K8<small>Node 03</small></div><div class="game-node api">API<small>payment-api</small></div><div class="game-node redis">R<small>Redis</small></div><div class="game-node db">DB<small>PostgreSQL</small></div><div class="incident-pop" id="incidentPop"><span>⚠</span><div><small>INCIDENT DETECTED</small><strong id="incidentTitle">CPU overload</strong></div></div></div><div class="game-actions" id="gameActions"><button data-action="scale">↗<span>Scale</span></button><button data-action="restart">↻<span>Restart</span></button><button data-action="failover">⇄<span>Failover</span></button><button data-action="storage">＋<span>Add storage</span></button><button data-action="renew">◇<span>Renew cert.</span></button><button data-action="block">⊘<span>Block traffic</span></button></div><div class="game-footer"><button id="startGame">Start incident simulation <span>→</span></button><p id="gameMessage">Ready when you are.</p></div></div></div>
+    </section>
+
+    <section class="section modular shell"><div class="section-heading centered reveal"><span class="kicker">START WHERE YOU NEED US</span><h2>One module today.<br><em>A platform tomorrow.</em></h2><p>Adopt at your pace. Every capability works independently and becomes more powerful together.</p></div><div class="module-assembly reveal"><div class="assembly-row"><span>Monitoring</span><span>Kubernetes</span><span>App Platform</span><span>Databases</span><span>Security</span><span>FinOps</span></div><div class="assembly-lines"></div><div class="platform-block"><span class="brand-mark"><i></i><i></i><i></i></span><div><strong>AgileCloud Platform</strong><small>YOUR UNIFIED CONTROL PLANE</small></div><b>→</b></div></div></section>
+
+    <section class="final-cta" id="contact"><div class="cta-grid"></div><div class="shell reveal"><span class="kicker">READY TO TAKE CONTROL?</span><h2>Complex infrastructure.<br><em>Simple experience.</em></h2><p>Bring clarity, control and intelligence to the infrastructure you already own.</p><div><a class="button primary" href="mailto:hello@agilecrafters.net?subject=AgileCloud%20early%20access">Start with AgileCloud <span>→</span></a><a class="button ghost" href="mailto:hello@agilecrafters.net?subject=AgileCloud%20demo">Talk to an expert</a></div><small>No migration required · Deploy in your infrastructure · Enterprise ready</small></div></section>
+  </main>
+
+  <footer><div class="shell footer-grid"><div><a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i></span><span>Agile<span>Cloud</span></span></a><p>The intelligent control plane for your infrastructure.</p><span class="made-by">A product by <b>AgileCrafters</b></span></div><div><strong>PLATFORM</strong><a href="#platform">Overview</a><a href="#deploy-demo">Deploy</a><a href="#platform">Kubernetes</a><a href="#platform">Observability</a><a href="#platform">AI Ops</a></div><div><strong>COMPANY</strong><a href="/company.html">About</a><a href="/security.html">Security</a><a href="mailto:hello@agilecrafters.net">Contact</a></div><div><strong>STATUS</strong><span class="status"><i></i> All systems operational</span><a href="mailto:hello@agilecrafters.net">hello@agilecrafters.net</a></div></div><div class="shell footer-bottom"><span>© 2026 AgileCrafters. All rights reserved.</span><span>Built for infrastructure that stays yours.</span></div></footer>
+</body>
+</html>
