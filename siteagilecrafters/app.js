@@ -139,7 +139,7 @@ function setupBuilder() {
 
 function setupContact() {
   const form = document.querySelector("#contact-form"); if (!form) return;
-  form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const french=window.AgileI18n?.locale==="fr"; const subject=encodeURIComponent(`${french?"Demande de projet":"Project enquiry"} — ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`${french?"Nom":"Name"}: ${fd.get("name")}\n${french?"Organisation":"Organization"}: ${fd.get("organization")}\n${french?"E-mail":"Email"}: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
+  form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const french=window.AgileI18n?.locale==="fr"; const subject=encodeURIComponent(`${french?"Demande de projet :":"Project enquiry:"} ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`${french?"Nom":"Name"}: ${fd.get("name")}\n${french?"Organisation":"Organization"}: ${fd.get("organization")}\n${french?"E-mail":"Email"}: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
 }
 
 mountChrome(); window.AgileI18n?.init(); setupExperience(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
