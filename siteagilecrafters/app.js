@@ -51,23 +51,53 @@ function setupNetwork() {
   const ctx = canvas.getContext("2d");
   const network = canvas.closest(".network");
   const core = network.querySelector(".network-core");
-  let points = [], pointer = { x: .5, y: .5 }, raf;
+  const sculpture = network.querySelector(".network-sculpture");
+  const routeShapes = [
+    [[.32,.44],[.25,.43],[.17,.30],[.08,.30]],
+    [[.68,.44],[.75,.43],[.83,.30],[.92,.30]],
+    [[.31,.63],[.24,.63],[.17,.79],[.08,.79]],
+    [[.69,.63],[.76,.63],[.83,.79],[.92,.79]],
+    [[.5,.31],[.5,.26],[.5,.21],[.5,.15]],
+    [[.5,.72],[.5,.79],[.5,.87],[.5,.94]]
+  ];
+  let routes = [], pointer = { x: .5, y: .5 }, raf;
   const resize = () => {
     const dpr = Math.min(devicePixelRatio, 2), rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr; canvas.height = rect.height * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    points = Array.from({length: 28}, () => ({ x: Math.random()*rect.width, y: Math.random()*rect.height, vx:(Math.random()-.5)*.14, vy:(Math.random()-.5)*.14, r:Math.random()*1.5+.4 }));
+    const box = { x: sculpture.offsetLeft, y: sculpture.offsetTop, width: sculpture.offsetWidth, height: sculpture.offsetHeight };
+    const ratio = sculpture.naturalWidth && sculpture.naturalHeight ? sculpture.naturalWidth / sculpture.naturalHeight : 4 / 3;
+    let width = box.width, height = width / ratio, x = box.x, y = box.y + (box.height - height) / 2;
+    if (height > box.height) { height = box.height; width = height * ratio; x = box.x + (box.width - width) / 2; y = box.y; }
+    routes = routeShapes.map(shape => shape.map(([px,py]) => ({ x: x + px * width, y: y + py * height })));
   };
-  const draw = () => {
+  const pointOnRoute = (route, t) => {
+    const mt = 1 - t;
+    return {
+      x: mt*mt*mt*route[0].x + 3*mt*mt*t*route[1].x + 3*mt*t*t*route[2].x + t*t*t*route[3].x,
+      y: mt*mt*mt*route[0].y + 3*mt*mt*t*route[1].y + 3*mt*t*t*route[2].y + t*t*t*route[3].y
+    };
+  };
+  const drawPulse = (route, t, radius, alpha) => {
+    const point = pointOnRoute(route, t);
+    ctx.save();
+    ctx.shadowColor = `rgba(54,126,255,${alpha})`; ctx.shadowBlur = 12;
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`; ctx.strokeStyle = `rgba(54,112,238,${alpha})`; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.arc(point.x,point.y,radius,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore();
+  };
+  const draw = timestamp => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     ctx.clearRect(0,0,w,h);
-    for (const p of points) { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1; }
-    for(const p of points){ ctx.fillStyle="rgba(73,102,216,.12)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
+    routes.forEach((route,index) => {
+      const t = (timestamp * .00024 + index * .105) % 1;
+      drawPulse(route,(t + .965) % 1,1.7,.38);
+      drawPulse(route,t,3.1,.96);
+    });
     raf=requestAnimationFrame(draw);
   };
-  resize(); draw(); addEventListener("resize", resize);
+  resize(); raf=requestAnimationFrame(draw); addEventListener("resize", resize); sculpture.addEventListener("load", resize,{once:true});
   network.addEventListener("pointermove", e => { const r=canvas.getBoundingClientRect(); pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}; core.style.setProperty("--core-x",`${(pointer.x-.5)*16}px`); core.style.setProperty("--core-y",`${(pointer.y-.5)*16}px`); network.style.transform=`rotateX(${(.5-pointer.y)*3}deg) rotateY(${(pointer.x-.5)*4}deg)`; });
   network.addEventListener("pointerleave",()=>{ core.style.setProperty("--core-x","0px"); core.style.setProperty("--core-y","0px"); network.style.transform=""; });
-  document.addEventListener("visibilitychange",()=>{ if(document.hidden)cancelAnimationFrame(raf); else draw(); });
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden)cancelAnimationFrame(raf); else raf=requestAnimationFrame(draw); });
 }
 
 function setupProductExplorer() {
