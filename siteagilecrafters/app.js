@@ -24,6 +24,9 @@ function mountChrome() {
     syncNav(); addEventListener("scroll", syncNav, { passive: true });
     menu.addEventListener("click", () => { const open = links.classList.toggle("open"); menu.setAttribute("aria-expanded", open); });
   }
+  if (!document.querySelector(".scroll-signal")) {
+    document.body.insertAdjacentHTML("beforeend", `<div class="scroll-signal" aria-hidden="true"><span></span><b>INDEX</b><small>00</small></div>`);
+  }
   if (footer) footer.innerHTML = `<footer><div class="container"><div class="footer-grid">
     <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"></span><span>AgileCrafters</span></a><p>Technology company & software publisher. We engineer digital systems and build software products for organizations shaping what comes next.</p></div>
     <div class="footer-col"><h4>Explore</h4><a href="expertise.html">Expertise</a><a href="products.html">Products</a><a href="industries.html">Industries</a><a href="work.html">Work</a></div>
@@ -81,6 +84,17 @@ function setupNetwork() {
 
 function setupExperience() {
   requestAnimationFrame(() => document.body.classList.add("is-ready"));
+  const scrollSignal = document.querySelector(".scroll-signal");
+  const syncScrollSignal = () => {
+    if (!scrollSignal) return;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const progress = Math.min(1, Math.max(0, scrollY / max));
+    scrollSignal.style.setProperty("--progress", progress);
+    const counter = scrollSignal.querySelector("small");
+    if (counter) counter.textContent = String(Math.round(progress * 99)).padStart(2, "0");
+  };
+  syncScrollSignal();
+  addEventListener("scroll", syncScrollSignal, { passive: true });
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const tiltCards = document.querySelectorAll(".engine, .product-card");
