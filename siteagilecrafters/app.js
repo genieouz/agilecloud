@@ -64,13 +64,13 @@ function setupNetwork() {
       const end = { x: rect.left - root.left + rect.width / 2, y: rect.top - root.top + rect.height / 2 };
       const dx = end.x - center.x, dy = end.y - center.y;
       const control = { x: center.x + dx * .48 - dy * .08, y: center.y + dy * .48 + dx * .08 };
-      ctx.strokeStyle = "rgba(30,98,233,.28)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
+      ctx.strokeStyle = "rgba(44,76,255,.32)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
       const t = (time + index / nodes.length) % 1;
       const mt = 1 - t, x = mt*mt*center.x + 2*mt*t*control.x + t*t*end.x, y = mt*mt*center.y + 2*mt*t*control.y + t*t*end.y;
-      ctx.fillStyle = "rgba(30,98,233,.9)"; ctx.beginPath(); ctx.rect(x-1.5,y-1.5,3,3); ctx.fill();
+      ctx.fillStyle = "rgba(44,76,255,.92)"; ctx.beginPath(); ctx.rect(x-1.5,y-1.5,3,3); ctx.fill();
     });
     for (const p of points) { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1; }
-    for(const p of points){ ctx.fillStyle="rgba(16,38,63,.16)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
+    for(const p of points){ ctx.fillStyle="rgba(23,54,111,.16)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
     raf=requestAnimationFrame(draw);
   };
   resize(); draw(); addEventListener("resize", resize);
@@ -111,7 +111,7 @@ function setupExperience() {
     if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const url = new URL(link.href, location.href);
     if (url.origin !== location.origin || url.hash || link.target || url.protocol !== "http:" && url.protocol !== "https:") return;
-    e.preventDefault(); document.body.classList.add("is-leaving"); setTimeout(() => location.href = url.href, 260);
+    e.preventDefault(); document.body.classList.add("is-leaving"); setTimeout(() => location.href = url.href, 360);
   });
 }
 
