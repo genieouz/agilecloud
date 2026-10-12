@@ -51,28 +51,15 @@ function setupNetwork() {
   const ctx = canvas.getContext("2d");
   const network = canvas.closest(".network");
   const core = network.querySelector(".network-core");
-  const nodes = [...network.querySelectorAll(".network-node")];
-  let points = [], pointer = { x: .5, y: .5 }, raf, time = 0;
+  let points = [], pointer = { x: .5, y: .5 }, raf;
   const resize = () => {
     const dpr = Math.min(devicePixelRatio, 2), rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * dpr; canvas.height = rect.height * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     points = Array.from({length: 28}, () => ({ x: Math.random()*rect.width, y: Math.random()*rect.height, vx:(Math.random()-.5)*.14, vy:(Math.random()-.5)*.14, r:Math.random()*1.5+.4 }));
   };
   const draw = () => {
-    const w = canvas.clientWidth, h = canvas.clientHeight, root = network.getBoundingClientRect();
-    time += .012; ctx.clearRect(0,0,w,h);
-    const center = { x: w / 2, y: h / 2 };
-    nodes.forEach((node, index) => {
-      const rect = node.getBoundingClientRect();
-      const end = { x: rect.left - root.left + rect.width / 2, y: rect.top - root.top + rect.height / 2 };
-      const dx = end.x - center.x, dy = end.y - center.y;
-      const control = { x: center.x + dx * .48 - dy * .08, y: center.y + dy * .48 + dx * .08 };
-      ctx.strokeStyle = "rgba(73,102,216,.45)"; ctx.lineWidth = 1.15; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
-      const t = (time + index / nodes.length) % 1;
-      const mt = 1 - t, x = mt*mt*center.x + 2*mt*t*control.x + t*t*end.x, y = mt*mt*center.y + 2*mt*t*control.y + t*t*end.y;
-      ctx.fillStyle = "rgba(73,102,216,.95)"; ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle = "rgba(73,102,216,.78)"; ctx.beginPath(); ctx.arc(end.x,end.y,3.2,0,Math.PI*2); ctx.fill();
-    });
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0,0,w,h);
     for (const p of points) { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1; }
     for(const p of points){ ctx.fillStyle="rgba(73,102,216,.12)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
     raf=requestAnimationFrame(draw);
