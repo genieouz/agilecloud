@@ -67,19 +67,76 @@ function setupNetwork() {
       const end = { x: rect.left - root.left + rect.width / 2, y: rect.top - root.top + rect.height / 2 };
       const dx = end.x - center.x, dy = end.y - center.y;
       const control = { x: center.x + dx * .48 - dy * .08, y: center.y + dy * .48 + dx * .08 };
-      ctx.strokeStyle = "rgba(44,76,255,.32)"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
+      ctx.strokeStyle = "rgba(73,102,216,.45)"; ctx.lineWidth = 1.15; ctx.beginPath(); ctx.moveTo(center.x, center.y); ctx.quadraticCurveTo(control.x, control.y, end.x, end.y); ctx.stroke();
       const t = (time + index / nodes.length) % 1;
       const mt = 1 - t, x = mt*mt*center.x + 2*mt*t*control.x + t*t*end.x, y = mt*mt*center.y + 2*mt*t*control.y + t*t*end.y;
-      ctx.fillStyle = "rgba(44,76,255,.92)"; ctx.beginPath(); ctx.rect(x-1.5,y-1.5,3,3); ctx.fill();
+      ctx.fillStyle = "rgba(73,102,216,.95)"; ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = "rgba(73,102,216,.78)"; ctx.beginPath(); ctx.arc(end.x,end.y,3.2,0,Math.PI*2); ctx.fill();
     });
     for (const p of points) { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1; }
-    for(const p of points){ ctx.fillStyle="rgba(23,54,111,.16)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
+    for(const p of points){ ctx.fillStyle="rgba(73,102,216,.12)"; ctx.fillRect(p.x,p.y,Math.max(1,p.r),Math.max(1,p.r)); }
     raf=requestAnimationFrame(draw);
   };
   resize(); draw(); addEventListener("resize", resize);
   network.addEventListener("pointermove", e => { const r=canvas.getBoundingClientRect(); pointer={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}; core.style.setProperty("--core-x",`${(pointer.x-.5)*16}px`); core.style.setProperty("--core-y",`${(pointer.y-.5)*16}px`); network.style.transform=`rotateX(${(.5-pointer.y)*3}deg) rotateY(${(pointer.x-.5)*4}deg)`; });
   network.addEventListener("pointerleave",()=>{ core.style.setProperty("--core-x","0px"); core.style.setProperty("--core-y","0px"); network.style.transform=""; });
   document.addEventListener("visibilitychange",()=>{ if(document.hidden)cancelAnimationFrame(raf); else draw(); });
+}
+
+function setupProductExplorer() {
+  const tabs = [...document.querySelectorAll("[data-product-tab]")];
+  const panels = [...document.querySelectorAll("[data-product-panel]")];
+  if (!tabs.length || !panels.length) return;
+  const indexLabel = document.querySelector("[data-product-index]");
+
+  const activate = (key, updateUrl = true) => {
+    const panel = panels.find(item => item.dataset.productPanel === key) || panels[0];
+    const activeKey = panel.dataset.productPanel;
+    tabs.forEach(tab => {
+      const active = tab.dataset.productTab === activeKey;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+    panels.forEach(item => {
+      const active = item === panel;
+      item.hidden = !active;
+      item.classList.toggle("is-active", active);
+    });
+    if (indexLabel) indexLabel.textContent = String(panels.indexOf(panel) + 1).padStart(2, "0");
+    if (updateUrl) {
+      const url = new URL(location.href);
+      url.hash = activeKey;
+      history.replaceState(null, "", url);
+    }
+    window.AgileI18n?.apply(panel);
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => activate(tab.dataset.productTab));
+    tab.addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      let next = index;
+      if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+      if (event.key === "Home") next = 0;
+      if (event.key === "End") next = tabs.length - 1;
+      tabs[next].focus();
+      activate(tabs[next].dataset.productTab);
+    });
+  });
+
+  document.querySelectorAll("[data-architecture-toggle]").forEach(button => {
+    button.addEventListener("click", () => {
+      const scene = button.closest(".product-panel")?.querySelector(".architecture-scene");
+      if (!scene) return;
+      const expanded = scene.classList.toggle("is-expanded");
+      button.setAttribute("aria-pressed", String(expanded));
+    });
+  });
+
+  const requested = location.hash.slice(1).toLowerCase();
+  activate(panels.some(panel => panel.dataset.productPanel === requested) ? requested : panels[0].dataset.productPanel, false);
 }
 
 function setupExperience() {
@@ -154,4 +211,4 @@ function setupContact() {
   form.addEventListener("submit", e => { e.preventDefault(); const fd=new FormData(form); const french=window.AgileI18n?.locale==="fr"; const subject=encodeURIComponent(`${french?"Demande de projet :":"Project enquiry:"} ${fd.get("organization")||fd.get("name")}`); const body=encodeURIComponent(`${french?"Nom":"Name"}: ${fd.get("name")}\n${french?"Organisation":"Organization"}: ${fd.get("organization")}\n${french?"E-mail":"Email"}: ${fd.get("email")}\n\n${fd.get("message")}`); location.href=`mailto:contact@agilecrafters.net?subject=${subject}&body=${body}`; });
 }
 
-mountChrome(); window.AgileI18n?.init(); setupExperience(); setupReveal(); setupNetwork(); setupBuilder(); setupContact();
+mountChrome(); window.AgileI18n?.init(); setupExperience(); setupReveal(); setupNetwork(); setupProductExplorer(); setupBuilder(); setupContact();
