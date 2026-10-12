@@ -191,19 +191,103 @@ function setupBuilder() {
   if (!stage) return;
   const score = document.querySelector(".score-panel");
   const palette = document.querySelectorAll(".component");
-  let count = 0;
+  const help = stage.querySelector("[data-builder-help]");
+  const clearLinks = stage.querySelector("[data-clear-links]");
+  const svgNS = "http://www.w3.org/2000/svg";
+  const linksLayer = document.createElementNS(svgNS, "svg");
+  linksLayer.classList.add("builder-links");
+  linksLayer.setAttribute("aria-hidden", "true");
+  linksLayer.innerHTML = `<defs><marker id="builder-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>`;
+  stage.prepend(linksLayer);
+  let count = 0, serial = 0, connectFrom = null;
+  let connections = [];
+
+  const translate = value => window.AgileI18n?.t(value) || value;
+  const setHelp = key => { if (help) help.textContent = translate(key); };
+  const resetConnection = () => {
+    connectFrom?.classList.remove("is-link-source");
+    connectFrom = null;
+    stage.classList.remove("is-connecting");
+    setHelp("Click a connection point, then another component.");
+  };
+  const anchors = (from, to) => {
+    const stageRect = stage.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    const forward = a.left + a.width / 2 <= b.left + b.width / 2;
+    return {
+      x1: (forward ? a.right : a.left) - stageRect.left,
+      y1: a.top + a.height / 2 - stageRect.top,
+      x2: (forward ? b.left : b.right) - stageRect.left,
+      y2: b.top + b.height / 2 - stageRect.top,
+      direction: forward ? 1 : -1
+    };
+  };
+  const renderConnections = () => {
+    linksLayer.querySelectorAll(".builder-link-group").forEach(group => group.remove());
+    connections.forEach(connection => {
+      const { x1, y1, x2, y2, direction } = anchors(connection.from, connection.to);
+      const bend = Math.max(55, Math.abs(x2 - x1) * .42);
+      const d = `M ${x1} ${y1} C ${x1 + bend * direction} ${y1}, ${x2 - bend * direction} ${y2}, ${x2} ${y2}`;
+      const group = document.createElementNS(svgNS, "g");
+      group.classList.add("builder-link-group");
+      const path = document.createElementNS(svgNS, "path");
+      path.classList.add("builder-link");
+      path.setAttribute("d", d);
+      path.setAttribute("marker-end", "url(#builder-arrow)");
+      const hit = document.createElementNS(svgNS, "path");
+      hit.classList.add("builder-link-hit");
+      hit.setAttribute("d", d);
+      hit.addEventListener("click", () => {
+        connections = connections.filter(item => item !== connection);
+        renderConnections();
+      });
+      group.append(path, hit);
+      linksLayer.append(group);
+    });
+    if (clearLinks) clearLinks.disabled = connections.length === 0;
+  };
+  const chooseConnection = node => {
+    if (!connectFrom) {
+      connectFrom = node;
+      node.classList.add("is-link-source");
+      stage.classList.add("is-connecting");
+      setHelp("Choose a second component.");
+      return;
+    }
+    if (connectFrom === node) { resetConnection(); return; }
+    const exists = connections.some(connection => connection.from === connectFrom && connection.to === node || connection.from === node && connection.to === connectFrom);
+    if (!exists) connections.push({ from: connectFrom, to: node });
+    resetConnection();
+    renderConnections();
+  };
+  clearLinks?.addEventListener("click", () => { connections = []; resetConnection(); renderConnections(); });
+
   function addNode(name, x, y) {
     if ([...stage.querySelectorAll(".builder-node")].some(n => n.dataset.name === name)) return;
-    const node = document.createElement("div"); node.className="builder-node"; node.dataset.name=name; node.textContent=window.AgileI18n?.t(name) || name;
+    const node = document.createElement("div");
+    node.className="builder-node";
+    node.dataset.name=name;
+    node.id=`builder-node-${++serial}`;
+    node.innerHTML=`<button class="node-port port-in" type="button" aria-label="${translate("Connect")} ${translate(name)}"></button><span class="builder-node-label">${translate(name)}</span><button class="node-port port-out" type="button" aria-label="${translate("Connect")} ${translate(name)}"></button>`;
     node.style.left=`${Math.max(10,Math.min(x,stage.clientWidth-160))}px`; node.style.top=`${Math.max(10,Math.min(y,stage.clientHeight-60))}px`; stage.append(node); count++;
-    let drag=null; node.addEventListener("pointerdown",e=>{drag={x:e.clientX-parseFloat(node.style.left),y:e.clientY-parseFloat(node.style.top)};node.setPointerCapture(e.pointerId)});
-    node.addEventListener("pointermove",e=>{if(!drag)return;node.style.left=`${Math.max(5,Math.min(e.clientX-drag.x,stage.clientWidth-150))}px`;node.style.top=`${Math.max(5,Math.min(e.clientY-drag.y,stage.clientHeight-50))}px`});
-    node.addEventListener("pointerup",()=>drag=null); if(count>=5) score.classList.add("show");
+    node.querySelectorAll(".node-port").forEach(port => port.addEventListener("click", event => { event.stopPropagation(); chooseConnection(node); }));
+    let drag=null;
+    node.addEventListener("pointerdown",e=>{if(e.target.closest(".node-port"))return;drag={x:e.clientX-parseFloat(node.style.left),y:e.clientY-parseFloat(node.style.top)};node.setPointerCapture(e.pointerId)});
+    node.addEventListener("pointermove",e=>{if(!drag)return;node.style.left=`${Math.max(5,Math.min(e.clientX-drag.x,stage.clientWidth-node.offsetWidth-5))}px`;node.style.top=`${Math.max(5,Math.min(e.clientY-drag.y,stage.clientHeight-node.offsetHeight-5))}px`;renderConnections()});
+    const stopDrag=()=>drag=null;
+    node.addEventListener("pointerup",stopDrag); node.addEventListener("pointercancel",stopDrag);
+    if(count>=5) score.classList.add("show");
   }
-  palette.forEach((el,i)=>{ el.draggable=true; el.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",el.dataset.component)); el.addEventListener("click",()=>addNode(el.dataset.component,50+(count%3)*160,60+Math.floor(count/3)*90)); });
+  palette.forEach(el=>{ el.draggable=true; el.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",el.dataset.component)); el.addEventListener("click",()=>{const columns=Math.max(1,Math.floor((stage.clientWidth-80)/180));addNode(el.dataset.component,50+(count%columns)*180,90+Math.floor(count/columns)*105)}); });
   stage.addEventListener("dragover",e=>e.preventDefault());
   stage.addEventListener("drop",e=>{e.preventDefault();const r=stage.getBoundingClientRect();addNode(e.dataTransfer.getData("text/plain"),e.clientX-r.left-65,e.clientY-r.top-20)});
-  document.addEventListener("localechange",()=>stage.querySelectorAll(".builder-node").forEach(node=>node.textContent=window.AgileI18n?.t(node.dataset.name)||node.dataset.name));
+  addEventListener("resize", renderConnections);
+  document.addEventListener("localechange",()=>{
+    stage.querySelectorAll(".builder-node").forEach(node=>{
+      node.querySelector(".builder-node-label").textContent=translate(node.dataset.name);
+      node.querySelectorAll(".node-port").forEach(port=>port.setAttribute("aria-label",`${translate("Connect")} ${translate(node.dataset.name)}`));
+    });
+    setHelp(connectFrom ? "Choose a second component." : "Click a connection point, then another component.");
+  });
 }
 
 function setupContact() {
