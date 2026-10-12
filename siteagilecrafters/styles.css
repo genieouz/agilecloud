@@ -387,7 +387,7 @@ body{background:#fbfdff;background-image:radial-gradient(circle at 77% 18%,rgba(
 .home-page .network::before{left:2%;right:0;bottom:3%;height:18%;background:rgba(116,144,190,.12);filter:blur(32px)}
 .network-sculpture{position:absolute;z-index:1;left:7%;top:4%;width:88%;height:94%;object-fit:contain;filter:drop-shadow(0 32px 28px rgba(65,88,135,.08));transform:translate3d(0,var(--network-y,0),0);animation:sculpture-breathe 7s ease-in-out infinite;pointer-events:none}
 .home-page .network-plane{display:none}.home-page #network-canvas{z-index:2;opacity:.7}
-.home-page .network-core{left:50%;top:51%;width:196px;height:130px;gap:8px;border:0;background:transparent;box-shadow:none;transform:translate(-50%,-50%) translate3d(var(--core-x,0),var(--core-y,0),45px)}
+.home-page .network-core{left:50%;top:47.5%;width:196px;height:130px;gap:8px;border:0;background:transparent;box-shadow:none;transform:translate(-50%,-50%) translate3d(var(--core-x,0),var(--core-y,0),45px)}
 .home-page .network-core::before{display:none}.home-page .network-core .core-mark{width:31px;height:28px}.home-page .network-core strong{font-size:17px}
 .home-page .network-node{min-width:178px;height:64px;padding:7px 18px 7px 9px;border-color:rgba(47,99,233,.1);border-radius:18px;background:rgba(255,255,255,.84);box-shadow:0 18px 42px rgba(54,75,118,.12),inset 0 1px #fff;backdrop-filter:blur(18px)}
 .home-page .network-node .node-glyph{width:46px;height:46px;background:rgba(248,251,255,.88);box-shadow:0 9px 18px rgba(63,83,126,.09)}
