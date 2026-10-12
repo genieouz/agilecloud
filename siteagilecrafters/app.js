@@ -13,8 +13,8 @@ function mountChrome() {
   if (header) {
     header.innerHTML = `<a class="skip-link" href="#main">Skip to content</a>
       <nav class="site-nav" aria-label="Primary"><div class="nav-inner">
-        <a class="brand" href="index.html" aria-label="AgileCrafters home"><span class="brand-mark" aria-hidden="true"></span><span>AgileCrafters</span></a>
-        <div class="nav-links" id="nav-links">${navItems.map(([href, label]) => `<a href="${href}" ${page === href ? 'aria-current="page"' : ""}>${label}</a>`).join("")}<div class="locale-switch" role="group" aria-label="Language"><button type="button" data-locale="en" aria-label="English">EN</button><span aria-hidden="true">/</span><button type="button" data-locale="fr" aria-label="Français">FR</button></div><a class="nav-cta" href="contact.html" ${page === "contact.html" ? 'aria-current="page"' : ""}>Start a project</a></div>
+        <a class="brand" href="index.html" aria-label="AgileCrafters home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">AgileCrafters</span><span class="brand-strap">Technologies<br>Human progress</span></a>
+        <div class="nav-links" id="nav-links">${navItems.map(([href, label]) => `<a href="${href}" ${page === href ? 'aria-current="page"' : ""}>${label}</a>`).join("")}<div class="locale-switch" role="group" aria-label="Language"><button type="button" data-locale="en" aria-label="English">EN</button><span aria-hidden="true">/</span><button type="button" data-locale="fr" aria-label="Français">FR</button></div><a class="nav-cta" href="contact.html" ${page === "contact.html" ? 'aria-current="page"' : ""}>Start a project ${arrow}</a></div>
         <button class="menu-btn" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
       </div></nav>`;
     const nav = header.querySelector(".site-nav");
@@ -25,7 +25,7 @@ function mountChrome() {
     menu.addEventListener("click", () => { const open = links.classList.toggle("open"); menu.setAttribute("aria-expanded", open); });
   }
   if (!document.querySelector(".scroll-signal")) {
-    document.body.insertAdjacentHTML("beforeend", `<div class="scroll-signal" aria-hidden="true"><span></span><b>INDEX</b><small>00</small></div>`);
+    document.body.insertAdjacentHTML("beforeend", `<div class="scroll-signal" aria-hidden="true"><div class="rail-numbers"><span class="active">01</span><span>02</span><span>03</span><span>04</span><span>05</span></div><i></i><b>Ideas<br>into<br>impact</b><small>01</small></div>`);
   }
   if (footer) footer.innerHTML = `<footer><div class="container"><div class="footer-grid">
     <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"></span><span>AgileCrafters</span></a><p>Technology company & software publisher. We engineer digital systems and build software products for organizations shaping what comes next.</p></div>
